@@ -1,0 +1,19 @@
+MERN STACK PROJECT
+
+1)Setting up Backend 
+2)Conneting mongodb online in chrome
+    .]add a new project by clicking at polling project
+    .]then create a cluster , and do the required formalities
+    .]then copy the mongouri and paste it in .env
+    .]then paste the password by editing it at database access
+3)node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+    .]run this command in terminal of vs code and get the jwt_secret key
+4)connect databse in server by variable() and requiring it form config file , 
+    .]db.js named file in config does all the connection to mongodb database
+5)create dynamic routes ad get them in server.js
+    .]require express
+    .]import routes from controllers
+    .] set router, then get paths from router == refer userRoute.js
+    .]export it 
+6)creating that routes in controllers
+    .]set the jwt token in controllers

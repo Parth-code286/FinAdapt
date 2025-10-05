@@ -1,0 +1,4 @@
+1)check if cookies are available or not
+2)decode the verify the jwt token by cooki and jwt key stored in env
+3)get the user details from database except the password AWAIT
+4)store this in a varibale and go next()

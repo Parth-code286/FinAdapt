@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+
+/* Custom properties for dark theme */
+@theme {
+  --font-display: "Poppins", sans-serif;
+  --breakpoint-3xl: 1920px;
+
+  --color-background: #121212;     /* Deep charcoal */
+  --color-surface: #1e1e2f;        /* Soft navy gray */
+  --color-primary: #c9b6ff;        /* Pastel lavender */
+  --color-accent: #ffb3c6;         /* Soft blush pink */
+  --color-text: #e0e0e0;           /* Light gray text */
+  --color-muted: #8884a7;          /* Muted bluish gray */
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: var(--font-display);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    overflow-x: hidden;
+  }
+
+  a {
+    color: var(--color-primary);
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: #121212;
+  }
+
+  /* Optional surface usage */
+  .card, .surface {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+}
