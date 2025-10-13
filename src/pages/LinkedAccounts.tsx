@@ -139,7 +139,9 @@ export default function LinkedAccounts() {
                 ))}
               </Pie>
               <Tooltip
-                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', color: 'white' }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                itemStyle={{ color: 'hsl(var(--foreground))' }}
               />
             </PieChart>
           </ResponsiveContainer>
