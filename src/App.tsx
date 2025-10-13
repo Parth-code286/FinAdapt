@@ -15,6 +15,8 @@ import Notifications from "./pages/Notifications";
 import LinkedAccounts from "./pages/LinkedAccounts";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import LoginPage from "./components/ui/loginPage";
+import SignUp from "./components/ui/signUp";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +46,8 @@ const App = () => (
             <Route path="/notifications" element={<DashboardLayout><Notifications /></DashboardLayout>} />
             <Route path="/linked-accounts" element={<DashboardLayout><LinkedAccounts /></DashboardLayout>} />
             <Route path="/profile" element={<DashboardLayout><Profile /></DashboardLayout>} />
+            <Route path="/login" element={<LoginPage/>} />
+            <Route path="/signup" element={<SignUp/>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
