@@ -50,12 +50,17 @@ export default function Dashboard() {
   const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
   const budgetProgress = useMemo(() => {
-    return state.budgets.map((budget) => ({
-      category: budget.category,
-      spent: budget.spent,
-      remaining: Math.max(0, budget.limit - budget.spent),
-    }));
-  }, [state.budgets]);
+    const totalBudget = 500; // Assuming total budget for demo
+    const spent = 175;
+    const remaining = 325;
+    return [
+      { x: 0, spent: 0, remaining: totalBudget },
+      { x: 0.25, spent: spent * 0.25, remaining: totalBudget - spent * 0.25 },
+      { x: 0.5, spent: spent * 0.5, remaining: totalBudget - spent * 0.5 },
+      { x: 0.75, spent: spent * 0.75, remaining: totalBudget - spent * 0.75 },
+      { x: 1, spent: spent, remaining: remaining },
+    ];
+  }, []);
 
   const recentTransactions = useMemo(() => {
     return state.transactions.slice(-5).reverse();
@@ -200,21 +205,16 @@ export default function Dashboard() {
           className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-6 shadow-lg"
         >
           <h3 className="text-lg font-semibold text-foreground mb-4">Budget Progress</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={budgetProgress} layout="horizontal">
-              <defs>
-                <linearGradient id="spentGradient" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="hsl(var(--chart-1))" />
-                  <stop offset="100%" stopColor="hsl(var(--chart-2))" />
-                </linearGradient>
-                <linearGradient id="remainingGradient" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="hsl(var(--muted))" />
-                  <stop offset="100%" stopColor="hsl(var(--muted-foreground))" />
-                </linearGradient>
-              </defs>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={budgetProgress}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-              <XAxis type="number" stroke="hsl(var(--muted-foreground))" />
-              <YAxis dataKey="category" type="category" stroke="hsl(var(--muted-foreground))" />
+              <XAxis
+                type="number"
+                domain={[0, 1]}
+                ticks={[0, 0.25, 0.5, 0.75, 1]}
+                stroke="hsl(var(--muted-foreground))"
+              />
+              <YAxis stroke="hsl(var(--muted-foreground))" />
               <Tooltip
                 contentStyle={{
                   backgroundColor: 'hsl(var(--card))',
@@ -224,42 +224,25 @@ export default function Dashboard() {
                 }}
                 labelStyle={{ color: 'hsl(var(--foreground))' }}
                 itemStyle={{ color: 'hsl(var(--foreground))' }}
-                content={({ active, payload, label }) => {
-                  if (active && payload && payload.length) {
-                    return (
-                      <div className="p-3">
-                        <p className="font-semibold text-foreground mb-2">{label}</p>
-                        {payload.map((entry, index) => (
-                          <div key={index} className="flex items-center gap-2 text-sm">
-                            <div
-                              className="w-3 h-3 rounded-full"
-                              style={{ backgroundColor: entry.color }}
-                            />
-                            <span className="text-foreground">{entry.name}:</span>
-                            <span className="font-semibold text-foreground">${entry.value}</span>
-                          </div>
-                        ))}
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
+                formatter={(value, name) => [`$${value}`, name === 'spent' ? 'Spent: $175' : 'Remaining: $325']}
               />
-              <Bar
+              <Line
+                type="monotone"
                 dataKey="spent"
-                stackId="a"
-                fill="url(#spentGradient)"
-                radius={[0, 4, 4, 0]}
-                animationDuration={1000}
+                stroke="hsl(var(--chart-1))"
+                strokeWidth={3}
+                dot={{ fill: 'hsl(var(--chart-1))', strokeWidth: 2, r: 6 }}
+                activeDot={{ r: 8 }}
               />
-              <Bar
+              <Line
+                type="monotone"
                 dataKey="remaining"
-                stackId="a"
-                fill="url(#remainingGradient)"
-                radius={[0, 4, 4, 0]}
-                animationDuration={1000}
+                stroke="hsl(var(--chart-2))"
+                strokeWidth={3}
+                dot={{ fill: 'hsl(var(--chart-2))', strokeWidth: 2, r: 6 }}
+                activeDot={{ r: 8 }}
               />
-            </BarChart>
+            </LineChart>
           </ResponsiveContainer>
         </motion.div>
 
