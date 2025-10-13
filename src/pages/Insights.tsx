@@ -132,6 +132,8 @@ export default function Insights() {
               </Pie>
               <Tooltip
                 contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                itemStyle={{ color: 'hsl(var(--foreground))' }}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -151,6 +153,8 @@ export default function Insights() {
               <YAxis stroke="hsl(var(--muted-foreground))" />
               <Tooltip
                 contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                itemStyle={{ color: 'hsl(var(--foreground))' }}
               />
               <Legend />
               <Bar dataKey="spending" fill="hsl(var(--chart-3))" name="Spending" />

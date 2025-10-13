@@ -145,6 +145,7 @@ export default function Dashboard() {
               <Tooltip
                 contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
                 labelStyle={{ color: 'hsl(var(--foreground))' }}
+                itemStyle={{ color: 'hsl(var(--foreground))' }}
               />
               <Legend />
               <Line type="monotone" dataKey="spending" stroke="hsl(var(--chart-1))" strokeWidth={2} />
@@ -161,17 +162,19 @@ export default function Dashboard() {
           className="bg-card border border-border rounded-xl p-6"
         >
           <h3 className="text-lg font-semibold text-foreground mb-4">Category Breakdown</h3>
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
                 data={categoryData}
                 cx="50%"
                 cy="50%"
-                labelLine={false}
+                labelLine={true}
                 label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
+                outerRadius={90}
+                innerRadius={40}
                 fill="#8884d8"
                 dataKey="value"
+                minAngle={5}
               >
                 {categoryData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -179,6 +182,8 @@ export default function Dashboard() {
               </Pie>
               <Tooltip
                 contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                itemStyle={{ color: 'hsl(var(--foreground))' }}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -192,20 +197,68 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="bg-card border border-border rounded-xl p-6"
+          className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-6 shadow-lg"
         >
           <h3 className="text-lg font-semibold text-foreground mb-4">Budget Progress</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={budgetProgress} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <defs>
+                <linearGradient id="spentGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="hsl(var(--chart-1))" />
+                  <stop offset="100%" stopColor="hsl(var(--chart-2))" />
+                </linearGradient>
+                <linearGradient id="remainingGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="hsl(var(--muted))" />
+                  <stop offset="100%" stopColor="hsl(var(--muted-foreground))" />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
               <XAxis type="number" stroke="hsl(var(--muted-foreground))" />
               <YAxis dataKey="category" type="category" stroke="hsl(var(--muted-foreground))" />
               <Tooltip
-                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px hsl(var(--shadow))'
+                }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                itemStyle={{ color: 'hsl(var(--foreground))' }}
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="p-3">
+                        <p className="font-semibold text-foreground mb-2">{label}</p>
+                        {payload.map((entry, index) => (
+                          <div key={index} className="flex items-center gap-2 text-sm">
+                            <div
+                              className="w-3 h-3 rounded-full"
+                              style={{ backgroundColor: entry.color }}
+                            />
+                            <span className="text-foreground">{entry.name}:</span>
+                            <span className="font-semibold text-foreground">${entry.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
               />
-              <Legend />
-              <Bar dataKey="spent" stackId="a" fill="hsl(var(--chart-1))" />
-              <Bar dataKey="remaining" stackId="a" fill="hsl(var(--muted))" />
+              <Bar
+                dataKey="spent"
+                stackId="a"
+                fill="url(#spentGradient)"
+                radius={[0, 4, 4, 0]}
+                animationDuration={1000}
+              />
+              <Bar
+                dataKey="remaining"
+                stackId="a"
+                fill="url(#remainingGradient)"
+                radius={[0, 4, 4, 0]}
+                animationDuration={1000}
+              />
             </BarChart>
           </ResponsiveContainer>
         </motion.div>
