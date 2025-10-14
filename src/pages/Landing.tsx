@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaRobot, FaChartLine, FaShieldAlt, FaBolt } from "react-icons/fa";
-
+import { MdDashboard } from "react-icons/md";
 export default function Landing() {
   const navigate = useNavigate();
 
@@ -34,6 +34,12 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0a0f1f] via-[#0d152a] to-[#0a0f1f] text-white relative overflow-hidden">
+      <div className="flex items-center">
+        <MdDashboard className="text-primary text-4xl ml-3 mt-3" />
+        <span className="font-bold text-4xl mt-3 bg-gradient-to-r from-blue-300 to-cyan-500 text-transparent bg-clip-text">
+  &nbsp;FinAdapt
+</span>
+      </div>
       {/* Floating background gradients */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
