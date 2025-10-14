@@ -22,6 +22,8 @@ const navItems = [
   { title: 'Notifications', path: '/notifications', icon: FaBell },
   { title: 'Linked Accounts', path: '/linked-accounts', icon: FaLink },
   { title: 'Profile', path: '/profile', icon: FaUser },
+  { title: 'Expert Advice', path: '/expert-advice', icon: FaUser },
+  { title: 'Habits', path: '/behavioral-analysis', icon: FaUser },
 ];
 
 export function Sidebar() {
