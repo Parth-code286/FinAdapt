@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useData } from '@/contexts/DataContext';
-import { FaUser, FaEnvelope, FaDollarSign, FaChartLine } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaDollarSign, FaChartLine, FaCheckCircle, FaStar, FaCreditCard, FaPlus } from 'react-icons/fa';
+import { FaCcVisa, FaCcMastercard } from 'react-icons/fa';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ToastContainer, ToastMessage } from '@/components/Toast';
 
@@ -13,6 +14,7 @@ export default function Profile() {
     email: state.profile.email,
     currency: state.profile.currency,
   });
+  const [currentPlan, setCurrentPlan] = useState('Pro');
 
   useEffect(() => {
     setFormData({
@@ -60,6 +62,31 @@ export default function Profile() {
     return { totalTransactions, totalBudgets, totalAccounts };
   }, [state.transactions, state.budgets, state.linkedAccounts]);
 
+  const subscriptionPlans = [
+    {
+      name: 'Basic',
+      price: 'Free',
+      features: ['Basic Budgeting', 'Manual Transactions', 'Limited Reports'],
+    },
+    {
+      name: 'Pro',
+      price: '$15 / month',
+      features: ['All Basic Features', 'Automated Bank Sync', 'AI Insights', 'Advanced Reports'],
+    },
+    {
+      name: 'Enterprise',
+      price: 'Contact Us',
+      features: ['All Pro Features', 'Team Management', 'Priority Support', 'Custom Integrations'],
+    },
+  ];
+
+  const handlePlanChange = (planName: string) => {
+    if (planName !== currentPlan) {
+      setCurrentPlan(planName);
+      addToast(`Plan changed to ${planName}`, 'success');
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <ToastContainer toasts={toasts} onRemove={removeToast} />
@@ -70,7 +97,7 @@ export default function Profile() {
         <p className="text-sm text-muted-foreground mt-1">Manage your account preferences</p>
       </div>
 
-      {/* Profile Card */}
+      {/* Profile Card & Stats Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -78,9 +105,7 @@ export default function Profile() {
           className="lg:col-span-2 bg-card border border-border rounded-xl p-6"
         >
           <h3 className="text-lg font-semibold text-foreground mb-6">Personal Information</h3>
-
           <div className="space-y-6">
-            {/* Avatar Section */}
             <div className="flex items-center gap-4 pb-6 border-b border-border">
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
                 <FaUser className="text-3xl text-primary" />
@@ -90,8 +115,6 @@ export default function Profile() {
                 <p className="text-sm text-muted-foreground">{formData.email}</p>
               </div>
             </div>
-
-            {/* Form Fields */}
             <div className="space-y-4">
               <div>
                 <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
@@ -106,7 +129,6 @@ export default function Profile() {
                   placeholder="Enter your full name"
                 />
               </div>
-
               <div>
                 <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
                   <FaEnvelope /> Email Address
@@ -120,7 +142,6 @@ export default function Profile() {
                   placeholder="Enter your email"
                 />
               </div>
-
               <div>
                 <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
                   <FaDollarSign /> Preferred Currency
@@ -145,8 +166,6 @@ export default function Profile() {
             </div>
           </div>
         </motion.div>
-
-        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -170,7 +189,6 @@ export default function Profile() {
               </div>
             </div>
           </div>
-
           <div className="bg-card border border-border rounded-xl p-6">
             <h3 className="text-lg font-semibold text-foreground mb-2">Member Since</h3>
             <p className="text-sm text-muted-foreground">January 2025</p>
@@ -208,11 +226,121 @@ export default function Profile() {
         </ResponsiveContainer>
       </motion.div>
 
-      {/* Preferences */}
+      {/* Subscription & Billing Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
+        className="bg-card border border-border rounded-xl p-6"
+      >
+        <h3 className="text-lg font-semibold text-foreground mb-4">Subscription & Billing</h3>
+        <p className="text-sm text-muted-foreground mb-6">Manage your subscription plan and billing details.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {subscriptionPlans.map((plan) => (
+            <div
+              key={plan.name}
+              className={`relative rounded-lg p-6 flex flex-col border-2 transition-all duration-300 ${
+                currentPlan === plan.name ? 'border-primary shadow-lg scale-105' : 'border-border'
+              }`}
+            >
+              {currentPlan === plan.name && (
+                <div className="absolute -top-3 right-4 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
+                  Current Plan
+                </div>
+              )}
+              <div className="flex-grow">
+                <div className="flex items-center gap-2 mb-2">
+                   {plan.name === 'Enterprise' && <FaStar className="text-yellow-400" />}
+                   <h4 className="text-xl font-bold text-foreground">{plan.name}</h4>
+                </div>
+                <p className="text-2xl font-extrabold text-foreground mb-4">{plan.price}</p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-center gap-2">
+                      <FaCheckCircle className="text-green-500 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <button
+                onClick={() => handlePlanChange(plan.name)}
+                disabled={currentPlan === plan.name}
+                className={`w-full mt-6 py-2 px-4 rounded-lg font-semibold transition-colors ${
+                    currentPlan === plan.name
+                    ? 'bg-secondary text-muted-foreground cursor-not-allowed'
+                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                }`}
+              >
+                {currentPlan === plan.name ? 'Current Plan' : 'Select Plan'}
+              </button>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* ======================================================= */}
+      {/* ============ NEW PAYMENT METHODS SECTION ============ */}
+      {/* ======================================================= */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="bg-card border border-border rounded-xl p-6"
+      >
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h3 className="text-lg font-semibold text-foreground">Payment Methods</h3>
+            <p className="text-sm text-muted-foreground mt-1">Add and manage your payment methods.</p>
+          </div>
+          <button 
+            onClick={() => addToast('This feature is not yet available.', 'info')}
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-semibold"
+          >
+            <FaPlus /> Add New Card
+          </button>
+        </div>
+        <div className="space-y-4">
+          {/* Saved Card 1 */}
+          <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
+            <div className="flex items-center gap-4">
+              <FaCcVisa className="text-4xl text-blue-600" />
+              <div>
+                <p className="font-semibold text-foreground">Visa ending in 1234</p>
+                <p className="text-sm text-muted-foreground">Expires 08/2028</p>
+              </div>
+              <span className="text-xs font-semibold bg-blue-500/20 text-blue-300 px-2 py-1 rounded-md">Default</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button className="text-sm text-muted-foreground hover:text-foreground">Edit</button>
+              <button className="text-sm text-muted-foreground hover:text-destructive">Remove</button>
+            </div>
+          </div>
+          {/* Saved Card 2 */}
+          <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
+            <div className="flex items-center gap-4">
+              <FaCcMastercard className="text-4xl text-orange-500" />
+              <div>
+                <p className="font-semibold text-foreground">Mastercard ending in 5678</p>
+                <p className="text-sm text-muted-foreground">Expires 11/2026</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button className="text-sm text-muted-foreground hover:text-foreground">Edit</button>
+              <button className="text-sm text-muted-foreground hover:text-destructive">Remove</button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+      {/* ======================================================= */}
+      {/* ============ END OF PAYMENT METHODS SECTION ============ */}
+      {/* ======================================================= */}
+
+      {/* Preferences */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
         className="bg-card border border-border rounded-xl p-6"
       >
         <h3 className="text-lg font-semibold text-foreground mb-4">Preferences</h3>
@@ -227,7 +355,6 @@ export default function Profile() {
               <div className="w-12 h-6 bg-muted rounded-full peer peer-checked:bg-primary after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-6"></div>
             </label>
           </div>
-
           <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
             <div>
               <p className="text-sm font-medium text-foreground">Budget Alerts</p>
@@ -238,7 +365,6 @@ export default function Profile() {
               <div className="w-12 h-6 bg-muted rounded-full peer peer-checked:bg-primary after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-6"></div>
             </label>
           </div>
-
           <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
             <div>
               <p className="text-sm font-medium text-foreground">Auto-Sync Accounts</p>
