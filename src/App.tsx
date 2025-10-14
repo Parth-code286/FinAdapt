@@ -7,6 +7,7 @@ import { DataProvider } from "@/contexts/DataContext";
 import { Sidebar } from "@/components/Sidebar";
 import { Topbar } from "@/components/Topbar";
 import ExpertAdvice from "./pages/ExpertAdvice";
+import BehavioralAnalysis from "./pages/BehaviouralAnalysis";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
@@ -41,6 +42,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/expert-advice" element={<ExpertAdvice />} />
+            <Route path="/behavioral-analysis" element={<BehavioralAnalysis />} />
             <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
             <Route path="/transactions" element={<DashboardLayout><Transactions /></DashboardLayout>} />
             <Route path="/budgets" element={<DashboardLayout><Budgets /></DashboardLayout>} />
