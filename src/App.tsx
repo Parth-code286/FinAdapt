@@ -19,7 +19,7 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import LoginPage from "./components/ui/loginPage";
 import SignUp from "./components/ui/signUp";
-
+import FinancialCoach from "./pages/FinancialCoach";
 const queryClient = new QueryClient();
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => (
@@ -41,6 +41,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/financial-coach" element={<FinancialCoach />} />
             <Route path="/expert-advice" element={<ExpertAdvice />} />
             <Route path="/behavioral-analysis" element={<BehavioralAnalysis />} />
             <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
