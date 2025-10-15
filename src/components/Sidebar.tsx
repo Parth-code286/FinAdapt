@@ -24,6 +24,7 @@ const navItems = [
   { title: 'Profile', path: '/profile', icon: FaUser },
   { title: 'Expert Advice', path: '/expert-advice', icon: FaUser },
   { title: 'Habits', path: '/behavioral-analysis', icon: FaUser },
+  { title: 'Financial Coach', path: '/financial-coach', icon: FaUser },
 ];
 
 export function Sidebar() {
