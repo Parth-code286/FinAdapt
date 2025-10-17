@@ -1,0 +1,35 @@
+{
+    "version": 2,
+    "name": "financial-coach-app",
+    "builds": [
+      {
+        "src": "package.json",
+        "use": "@vercel/static-build"
+      }
+    ],
+    "routes": [
+      { "src": "^/$", "dest": "/index.html" },
+      { "src": "^/financial-coach$", "dest": "/index.html" },
+      { "src": "^/expert-advice$", "dest": "/index.html" },
+      { "src": "^/behavioral-analysis$", "dest": "/index.html" },
+      { "src": "^/dashboard$", "dest": "/index.html" },
+      { "src": "^/transactions$", "dest": "/index.html" },
+      { "src": "^/budgets$", "dest": "/index.html" },
+      { "src": "^/insights$", "dest": "/index.html" },
+      { "src": "^/notifications$", "dest": "/index.html" },
+      { "src": "^/linked-accounts$", "dest": "/index.html" },
+      { "src": "^/profile$", "dest": "/index.html" },
+      { "src": "^/login$", "dest": "/index.html" },
+      { "src": "^/signup$", "dest": "/index.html" },
+      { "src": "^/.*$", "dest": "/index.html" }
+    ],
+    "env": {
+      "NODE_ENV": "production"
+    },
+    "build": {
+      "env": {
+        "CI": "false"
+      }
+    }
+  }
+  
